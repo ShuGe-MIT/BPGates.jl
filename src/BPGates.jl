@@ -412,9 +412,9 @@ julia> apply_as_qc!(BellState([0,1,1,0]), BellMeasure(2,1))
 function apply_as_qc! end
 
 function apply_as_qc!(state::BellState, gate::BellOp)
-    s = convert2QC(state)
+    s = QuantumClifford.Stabilizer(state)
     for (g, idx) in convert2QC(gate)
-        apply!(s, g, idx)
+        apply!(s, g, [i for i in idx])
     end
     new_phases = [project!(s,proj)[end]÷2 for proj in bell(length(state.phases)÷2)]
     state.phases .= new_phases
